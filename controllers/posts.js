@@ -1,6 +1,7 @@
 const cloudinary = require('../middleware/cloudinary');
 const calculate = require('../helpers/timeDiff.js');
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -22,17 +23,14 @@ module.exports = {
   getPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
-      console.log(post.createdAt);
-      console.log(new Date());
-      var Difference_In_Time = new Date() - post.createdAt;
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-      console.log(typeof Difference_In_Days);
-      // console.log(calculate.timeDiff(post.createdAt), 'hours ago');
+      const users = await User.find();
+      console.log(users);
       const timeSpan = calculate.timeDiff(post.createdAt);
       res.render('post.ejs', {
         post: post,
         user: req.user,
         timeSpan: timeSpan,
+        users: users,
       });
     } catch (err) {
       console.log(err);
