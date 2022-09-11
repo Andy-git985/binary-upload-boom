@@ -24,7 +24,6 @@ module.exports = {
     try {
       const post = await Post.findById(req.params.id);
       const users = await User.find();
-      console.log(users);
       const timeSpan = calculate.timeDiff(post.createdAt);
       res.render('post.ejs', {
         post: post,
