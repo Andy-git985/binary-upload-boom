@@ -42,7 +42,7 @@
           String(el.user)).userName%></span
         >
         <span><%= el.comment %></span>
-        <div><p><%= calculate.timeDiff(el.createdAt)%></p></div>
+        <div><p><%= calculate.commentDiff(el.createdAt)%></p></div>
       </div>
       <% }) %>
     </div>
@@ -57,7 +57,7 @@
     </div>
 
     <div>
-      <p><%= calculate.timeDiff(post.createdAt)%></p>
+      <p><%= calculate.postDiff(post.createdAt)%></p>
     </div>
     <div class="col-6 mt-5">
       <a class="btn btn-primary" href="/profile">Return to Profile</a>
