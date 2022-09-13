@@ -26,11 +26,12 @@ module.exports = {
     try {
       const post = await Post.findById(req.params.id);
       const users = await User.find();
-      const timeSpan = calculate.timeDiff(post.createdAt);
+      // const timeSpan = calculate.timeDiff(post.createdAt);
       res.render('post.ejs', {
         post: post,
         user: req.user,
-        timeSpan: timeSpan,
+        // timeSpan: timeSpan,
+        calculate: calculate,
         users: users,
       });
     } catch (err) {
