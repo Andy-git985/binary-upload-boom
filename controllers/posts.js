@@ -1,7 +1,11 @@
+const mongoose = require('mongoose');
 const cloudinary = require('../middleware/cloudinary');
 const calculate = require('../helpers/timeDiff.js');
 const Post = require('../models/Post');
 const User = require('../models/User');
+const { cloudinary_js_config } = require('../middleware/cloudinary');
+
+mongoose.set('debug', true);
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -50,6 +54,18 @@ module.exports = {
       });
       console.log('Post has been added!');
       res.redirect('/profile');
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  addComment: async (req, res) => {
+    try {
+      const post = await Post.findOne({ _id: req.params.id });
+      const comment = { comment: req.body.comment.trim() };
+      const user = await User.findOne({ _id: String(req.user.id) });
+      comment.user = user;
+      post.comments.push(comment);
+      await post.save();
     } catch (err) {
       console.log(err);
     }

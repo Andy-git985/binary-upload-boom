@@ -25,19 +25,21 @@
       </div>
     </div>
     <div class="col-3 mt-5">
-      <!-- ? get username -->
-      <% for(let k = 0; k < users.length; k++) {%> <% if (String(post.user) ===
-      String(users[k]["_id"])) { %>
-      <p><%= users[k].userName %></p>
-      <% } %> <% } %>
-
       <p>
         <%= users.filter(u => String(post.user) ===
         String(u["_id"]))[0].userName %>
       </p>
-
       <p><%= post.caption %></p>
     </div>
+    <!-- ! Add a comment -->
+    <div>
+      <form action="/post/addComment/<%= post.id %>?_method=POST" method="POST">
+        <label for="comment">Add a comment:</label>
+        <textarea name="comment" rows="3" cols="33"></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
     <div>
       <p><%= timeSpan %></p>
     </div>

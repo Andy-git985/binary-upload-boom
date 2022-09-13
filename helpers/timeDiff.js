@@ -31,7 +31,7 @@ module.exports = {
       diff /= 60 * 60;
       return `${Math.abs(Math.round(diff))} HOURS AGO`;
     } else {
-      return `${Difference_In_Days} DAYS AGO`;
+      return `${Math.trunc(Difference_In_Days)} DAYS AGO`;
     }
   },
 };
