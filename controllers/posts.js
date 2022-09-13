@@ -5,8 +5,6 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const { cloudinary_js_config } = require('../middleware/cloudinary');
 
-mongoose.set('debug', true);
-
 module.exports = {
   getProfile: async (req, res) => {
     try {
@@ -66,6 +64,8 @@ module.exports = {
       comment.user = user;
       post.comments.push(comment);
       await post.save();
+      console.log('Comment added');
+      res.redirect(`/post/${req.params.id}`);
     } catch (err) {
       console.log(err);
     }

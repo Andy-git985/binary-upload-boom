@@ -26,11 +26,26 @@
     </div>
     <div class="col-3 mt-5">
       <p>
+        <!-- ? Username of poster -->
         <%= users.filter(u => String(post.user) ===
         String(u["_id"]))[0].userName %>
       </p>
       <p><%= post.caption %></p>
     </div>
+
+    <!-- ! Comments list -->
+    <div>
+      <% post.comments.forEach( el => { %>
+      <div>
+        <span
+          ><%= users.find(u => String(u._id) ===
+          String(el.user)).userName%></span
+        >
+        <span><%= el.comment %></span>
+      </div>
+      <% }) %>
+    </div>
+
     <!-- ! Add a comment -->
     <div>
       <form action="/post/addComment/<%= post.id %>?_method=POST" method="POST">
