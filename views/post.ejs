@@ -33,7 +33,6 @@
       <p><%= post.caption %></p>
     </div>
 
-    <div>Starting new branch</div>
     <!-- ! Comments list -->
     <div>
       <% post.comments.forEach( el => { %>
@@ -44,6 +43,13 @@
         >
         <span><%= el.comment %></span>
         <div><p><%= calculate.commentDiff(el.createdAt)%></p></div>
+        <div>
+          <form action="/post/addReply/<%= el.id %>?_method=POST" method="POST">
+            <label for="reply">Add a reply:</label>
+            <textarea name="comment" rows="1" cols="33"></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       </div>
       <% }) %>
     </div>

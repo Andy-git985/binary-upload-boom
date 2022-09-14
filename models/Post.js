@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+const CommentSchema = new mongoose.Schema({
+  comment: {
+    type: String,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+CommentSchema.add({ replies: [CommentSchema] });
+
 const PostSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -25,21 +41,7 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  comments: [
-    {
-      comment: {
-        type: String,
-      },
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
+  comments: [CommentSchema],
   createdAt: {
     type: Date,
     default: Date.now,
