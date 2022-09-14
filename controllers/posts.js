@@ -61,7 +61,7 @@ module.exports = {
     try {
       const post = await Post.findOne({ _id: req.params.id });
       const comment = { comment: req.body.comment.trim() };
-      const user = await User.findOne({ _id: String(req.user.id) });
+      const user = await User.findOne({ _id: req.user.id });
       comment.user = user;
       post.comments.push(comment);
       await post.save();
@@ -75,7 +75,8 @@ module.exports = {
     try {
       // console.log(req.params.id);
       // console.log(req.body.reply);
-      const user = await User.findOne({ _id: String(req.user.id) });
+      const user = await User.findOne({ _id: req.user.id });
+      console.log(user);
       const post = await Post.findOne({
         'comments._id': { _id: req.params.id },
       });
@@ -84,6 +85,7 @@ module.exports = {
         comment: req.body.reply,
         user: user,
       });
+      console.log(post);
       await post.save();
       res.redirect(`/post/${postId}`);
     } catch (err) {
