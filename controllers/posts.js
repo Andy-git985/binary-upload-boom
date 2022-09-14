@@ -71,6 +71,25 @@ module.exports = {
       console.log(err);
     }
   },
+  addReply: async (req, res) => {
+    try {
+      // console.log(req.params.id);
+      // console.log(req.body.reply);
+      const user = await User.findOne({ _id: String(req.user.id) });
+      const post = await Post.findOne({
+        'comments._id': { _id: req.params.id },
+      });
+      const postId = post._id;
+      post.comments.id(req.params.id).replies.push({
+        comment: req.body.reply,
+        user: user,
+      });
+      await post.save();
+      res.redirect(`/post/${postId}`);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   likePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(

@@ -46,9 +46,24 @@
         <div>
           <form action="/post/addReply/<%= el.id %>?_method=POST" method="POST">
             <label for="reply">Add a reply:</label>
-            <textarea name="comment" rows="1" cols="33"></textarea>
+            <textarea name="reply" rows="1" cols="33"></textarea>
             <button type="submit">Submit</button>
           </form>
+        </div>
+        <div>
+          <% el.replies.forEach(r => { %>
+          <span><%= r.comment %></span>
+          <div>
+            <form
+              action="/post/addReply/<%= el.id %>?_method=POST"
+              method="POST"
+            >
+              <label for="reply">Add a reply:</label>
+              <textarea name="reply" rows="1" cols="33"></textarea>
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+          <% })%>
         </div>
       </div>
       <% }) %>
