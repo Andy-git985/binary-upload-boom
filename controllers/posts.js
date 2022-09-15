@@ -80,17 +80,22 @@ module.exports = {
     try {
       const user = await User.findOne({ _id: String(req.user.id) });
       const reply = {
-        comment: req.body.comment,
+        comment: req.body.reply,
         user: user,
       };
       const commentQuery = await Comment.findOne({ _id: req.params.id });
       const replyQuery = await Comment.findOne({ _id: req.params.id });
+      let postId;
       if (commentQuery) {
         reply.commentId = req.params.id;
+        reply.postId = commentQuery.postId;
         const newReply = await Reply.create(reply);
         commentQuery.replies.push(newReply);
         commentQuery.save();
+        postId = commentQuery.postId;
       }
+      console.log('Reply added');
+      res.redirect(`/post/${postId}`);
     } catch (err) {
       console.log(err);
     }
