@@ -29,12 +29,18 @@ module.exports = {
       const post = await Post.findById(req.params.id);
       const users = await User.find();
       const comments = await Comment.find({ postId: req.params.id });
+      const replies = await Reply.find({ postId: req.params.id });
+      console.log('Comments ===============');
+      console.log(comments);
+      console.log('Replies ===============');
+      console.log(replies);
       res.render('post.ejs', {
         post: post,
         user: req.user,
         calculate: calculate,
         users: users,
         comments: comments,
+        replies: replies,
       });
     } catch (err) {
       console.log(err);
