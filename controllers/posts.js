@@ -3,6 +3,7 @@ const cloudinary = require('../middleware/cloudinary');
 const calculate = require('../helpers/timeDiff.js');
 const Post = require('../models/Post');
 const User = require('../models/User');
+const Comment = require('../models/Comment');
 const { cloudinary_js_config } = require('../middleware/cloudinary');
 
 module.exports = {
@@ -26,13 +27,13 @@ module.exports = {
     try {
       const post = await Post.findById(req.params.id);
       const users = await User.find();
-      // const timeSpan = calculate.timeDiff(post.createdAt);
+      const comments = await Comment.find({ postId: req.params.id });
       res.render('post.ejs', {
         post: post,
         user: req.user,
-        // timeSpan: timeSpan,
         calculate: calculate,
         users: users,
+        comments: comments,
       });
     } catch (err) {
       console.log(err);
@@ -60,9 +61,12 @@ module.exports = {
   addComment: async (req, res) => {
     try {
       const post = await Post.findOne({ _id: req.params.id });
-      const comment = { comment: req.body.comment.trim() };
       const user = await User.findOne({ _id: String(req.user.id) });
-      comment.user = user;
+      const comment = await Comment.create({
+        postId: req.params.id,
+        comment: req.body.comment.trim(),
+        user: user,
+      });
       post.comments.push(comment);
       await post.save();
       console.log('Comment added');

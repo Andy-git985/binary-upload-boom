@@ -34,18 +34,6 @@
     </div>
 
     <!-- ! Comments list -->
-    <div>
-      <% post.comments.forEach( el => { %>
-      <div>
-        <span
-          ><%= users.find(u => String(u._id) ===
-          String(el.user)).userName%></span
-        >
-        <span><%= el.comment %></span>
-        <div><p><%= calculate.commentDiff(el.createdAt)%></p></div>
-      </div>
-      <% }) %>
-    </div>
 
     <!-- ! Add a comment -->
     <div>
