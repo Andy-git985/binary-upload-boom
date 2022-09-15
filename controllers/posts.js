@@ -4,6 +4,7 @@ const calculate = require('../helpers/timeDiff.js');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
+const Reply = require('../models/Reply');
 const { cloudinary_js_config } = require('../middleware/cloudinary');
 
 module.exports = {
@@ -71,6 +72,25 @@ module.exports = {
       await post.save();
       console.log('Comment added');
       res.redirect(`/post/${req.params.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  addReply: async (req, res) => {
+    try {
+      const user = await User.findOne({ _id: String(req.user.id) });
+      const reply = {
+        comment: req.body.comment,
+        user: user,
+      };
+      const commentQuery = await Comment.findOne({ _id: req.params.id });
+      const replyQuery = await Comment.findOne({ _id: req.params.id });
+      if (commentQuery) {
+        reply.commentId = req.params.id;
+        const newReply = await Reply.create(reply);
+        commentQuery.replies.push(newReply);
+        commentQuery.save();
+      }
     } catch (err) {
       console.log(err);
     }

@@ -45,7 +45,7 @@
         <span><%= c.comment %></span>
         <span><%= calculate.commentDiff(c.createdAt) %></span>
         <!-- ! Add a reply -->
-        <form action="/post/addReply/<%= post.id %>?_method=POST" method="POST">
+        <form action="/post/addReply/<%= c.id %>?_method=POST" method="POST">
           <label for="reply">Add a reply:</label>
           <textarea name="reply" rows="1" cols="15"></textarea>
           <button type="submit">Reply</button>
