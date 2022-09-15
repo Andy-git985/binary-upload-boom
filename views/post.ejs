@@ -50,12 +50,18 @@
           <textarea name="reply" rows="1" cols="15"></textarea>
           <button type="submit">Reply</button>
         </form>
-        <!-- ! Replies list -->
+        <!-- ! Replies to comments list -->
         <div>
           <% replies.filter(r1 => r1.commentId === String(c._id)).forEach( r2 =>
           { %>
           <div>
+            <span>
+              <!-- ? Username of replier -->
+              <%= users.find(u => String(u._id) === String(r2.user)).userName
+              %></span
+            >
             <span><%= r2.comment %></span>
+            <span><%= calculate.commentDiff(r2.createdAt)%></span>
           </div>
           <% }) %>
         </div>
@@ -67,7 +73,7 @@
     <div>
       <form action="/post/addComment/<%= post.id %>?_method=POST" method="POST">
         <label for="comment">Add a comment:</label>
-        <textarea name="comment" rows="3" cols="33"></textarea>
+        <textarea name="comment" rows="1" cols="15"></textarea>
         <button type="submit">Comment</button>
       </form>
     </div>
