@@ -91,9 +91,7 @@ module.exports = {
         user: user,
       };
       const commentQuery = await Comment.findOne({ _id: req.params.id });
-      console.log(commentQuery);
       const replyQuery = await Reply.findOne({ _id: req.params.id });
-      console.log(replyQuery);
       let postId;
       if (commentQuery) {
         reply.commentId = req.params.id;
