@@ -62,7 +62,17 @@
             >
             <span><%= r2.comment %></span>
             <span><%= calculate.commentDiff(r2.createdAt)%></span>
+            <span><%= r2._id %></span>
           </div>
+          <!-- ! Reply to reply form -->
+          <form
+            action="/post/addReply/<%= r2._id %>?_method=POST"
+            method="POST"
+          >
+            <label for="reply">Reply to reply:</label>
+            <textarea name="reply" rows="1" cols="15"></textarea>
+            <button type="submit">Reply</button>
+          </form>
           <% }) %>
         </div>
       </div>

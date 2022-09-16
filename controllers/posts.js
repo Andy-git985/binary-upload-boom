@@ -30,10 +30,10 @@ module.exports = {
       const users = await User.find();
       const comments = await Comment.find({ postId: req.params.id });
       const replies = await Reply.find({ postId: req.params.id });
-      console.log('Comments ===============');
-      console.log(comments);
-      console.log('Replies ===============');
-      console.log(replies);
+      // console.log('Comments ===============');
+      // console.log(comments);
+      // console.log('Replies ===============');
+      // console.log(replies);
       res.render('post.ejs', {
         post: post,
         user: req.user,
@@ -84,13 +84,16 @@ module.exports = {
   },
   addReply: async (req, res) => {
     try {
+      console.log(req.params.id);
       const user = await User.findOne({ _id: String(req.user.id) });
       const reply = {
         comment: req.body.reply,
         user: user,
       };
       const commentQuery = await Comment.findOne({ _id: req.params.id });
-      const replyQuery = await Comment.findOne({ _id: req.params.id });
+      console.log(commentQuery);
+      const replyQuery = await Reply.findOne({ _id: req.params.id });
+      console.log(replyQuery);
       let postId;
       if (commentQuery) {
         reply.commentId = req.params.id;
@@ -99,6 +102,13 @@ module.exports = {
         commentQuery.replies.push(newReply);
         commentQuery.save();
         postId = commentQuery.postId;
+      } else if (replyQuery) {
+        reply.parentId = req.params.id;
+        reply.postId = replyQuery.postId;
+        const newReply = await Reply.create(reply);
+        replyQuery.replies.push(newReply);
+        replyQuery.save();
+        postId = replyQuery.postId;
       }
       console.log('Reply added');
       res.redirect(`/post/${postId}`);
