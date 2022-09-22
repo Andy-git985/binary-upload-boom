@@ -1,0 +1,20 @@
+<% function showComments(comments){ %> <% comments.forEach((c) => { %>
+<div><%= c.comment %></div>
+<div>
+  <form action="/post/addComment/<%= c._id %>?_method=POST" method="POST">
+    <label for="comment">Add a comment:</label>
+    <textarea name="comment" rows="1" cols="15"></textarea>
+    <button type="submit">Comment</button>
+  </form>
+</div>
+<% if (c.replies.length === 0) return; %> <% c.replies.forEach((r) => { %>
+<div><%= r.comment %></div>
+<div>
+  <form action="/post/addComment/<%= r._id %>?_method=POST" method="POST">
+    <label for="comment">Add a comment:</label>
+    <textarea name="comment" rows="1" cols="15"></textarea>
+    <button type="submit">Comment</button>
+  </form>
+</div>
+<% showComments(r.replies) %> <% }) %> <% })%> <% } %> <% showComments(comments)
+%>

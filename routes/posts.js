@@ -14,6 +14,6 @@ router.put('/likePost/:id', postsController.likePost);
 router.delete('/deletePost/:id', postsController.deletePost);
 
 router.post('/addComment/:id', postsController.addComment);
-router.post('/addReply/:id', postsController.addReply);
+// router.post('/addReply/:id', postsController.addReply);
 
 module.exports = router;

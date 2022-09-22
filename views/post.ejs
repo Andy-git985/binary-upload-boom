@@ -33,51 +33,8 @@
       <p><%= post.caption %></p>
     </div>
 
-    <!-- ! Comments list -->
-    <div>
-      <% comments.forEach( c => { %>
-      <div>
-        <span>
-          <!-- ? Username of commenter -->
-          <%= users.filter(u => String(c.user) === String(u["_id"]))[0].userName
-          %></span
-        >
-        <span><%= c.comment %></span>
-        <span><%= calculate.commentDiff(c.createdAt) %></span>
-        <!-- ! Reply to comment -->
-        <form action="/post/addReply/<%= c.id %>?_method=POST" method="POST">
-          <label for="reply">Reply to comment:</label>
-          <textarea name="reply" rows="1" cols="15"></textarea>
-          <button type="submit">Reply</button>
-        </form>
-        <!-- ! Replies to comments list -->
-        <div>
-          <% replies.filter(r1 => r1.commentId === String(c._id)).forEach( r2 =>
-          { %>
-          <div>
-            <span>
-              <!-- ? Username of replier -->
-              <%= users.find(u => String(u._id) === String(r2.user)).userName
-              %></span
-            >
-            <span><%= r2.comment %></span>
-            <span><%= calculate.commentDiff(r2.createdAt)%></span>
-            <span><%= r2._id %></span>
-          </div>
-          <!-- ! Reply to reply form -->
-          <form
-            action="/post/addReply/<%= r2._id %>?_method=POST"
-            method="POST"
-          >
-            <label for="reply">Reply to reply:</label>
-            <textarea name="reply" rows="1" cols="15"></textarea>
-            <button type="submit">Reply</button>
-          </form>
-          <% }) %>
-        </div>
-      </div>
-      <% }) %>
-    </div>
+    <!-- ! Comment -->
+    <%- include('partials/comments-test') -%>
 
     <!-- ! Add a comment -->
     <div>

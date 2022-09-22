@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
+  parent: {
+    type: Boolean,
+  },
   postId: {
     type: String,
     required: true,
+  },
+  parentId: {
+    type: String,
   },
   comment: {
     type: String,
@@ -12,16 +18,12 @@ const CommentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  replies: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Reply',
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
+
+CommentSchema.add({ replies: [CommentSchema] });
 
 module.exports = mongoose.model('Comment', CommentSchema);

@@ -4,7 +4,6 @@ const calculate = require('../helpers/timeDiff.js');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
-const Reply = require('../models/Reply');
 const { cloudinary_js_config } = require('../middleware/cloudinary');
 
 module.exports = {
@@ -28,19 +27,17 @@ module.exports = {
     try {
       const post = await Post.findById(req.params.id);
       const users = await User.find();
-      const comments = await Comment.find({ postId: req.params.id });
-      const replies = await Reply.find({ postId: req.params.id });
-      // console.log('Comments ===============');
-      // console.log(comments);
-      // console.log('Replies ===============');
-      // console.log(replies);
+      const comments = await Comment.find({
+        postId: req.params.id,
+        parent: true,
+      });
+      console.log(comments);
       res.render('post.ejs', {
         post: post,
         user: req.user,
         calculate: calculate,
         users: users,
         comments: comments,
-        replies: replies,
       });
     } catch (err) {
       console.log(err);
@@ -69,51 +66,66 @@ module.exports = {
     try {
       const post = await Post.findOne({ _id: req.params.id });
       const user = await User.findOne({ _id: String(req.user.id) });
-      const comment = await Comment.create({
-        postId: req.params.id,
-        comment: req.body.comment.trim(),
-        user: user,
-      });
-      post.comments.push(comment);
-      await post.save();
-      console.log('Comment added');
-      res.redirect(`/post/${req.params.id}`);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-  addReply: async (req, res) => {
-    try {
-      console.log(req.params.id);
-      const user = await User.findOne({ _id: String(req.user.id) });
-      const reply = {
-        comment: req.body.reply,
+      const comment = {
+        comment: req.body.comment,
         user: user,
       };
-      const commentQuery = await Comment.findOne({ _id: req.params.id });
-      const replyQuery = await Reply.findOne({ _id: req.params.id });
+      const commentQuery = await Comment.findOne({
+        _id: req.params.id,
+      });
       let postId;
-      if (commentQuery) {
-        reply.commentId = req.params.id;
-        reply.postId = commentQuery.postId;
-        const newReply = await Reply.create(reply);
+      if (post) {
+        comment.parent = true;
+        comment.postId = req.params.id;
+        const newComment = await Comment.create(comment);
+        post.comments.push(newComment);
+        await post.save();
+        postId = req.params.id;
+      } else if (commentQuery) {
+        comment.parentId = req.params.id;
+        comment.postId = commentQuery.postId;
+        const newReply = await Comment.create(comment);
         commentQuery.replies.push(newReply);
-        commentQuery.save();
+        await commentQuery.save();
         postId = commentQuery.postId;
-      } else if (replyQuery) {
-        reply.parentId = req.params.id;
-        reply.postId = replyQuery.postId;
-        const newReply = await Reply.create(reply);
-        replyQuery.replies.push(newReply);
-        replyQuery.save();
-        postId = replyQuery.postId;
       }
-      console.log('Reply added');
+      console.log('Comment added');
       res.redirect(`/post/${postId}`);
     } catch (err) {
       console.log(err);
     }
   },
+  // addReply: async (req, res) => {
+  //   try {
+  //     console.log(req.params.id);
+  //     const user = await User.findOne({ _id: String(req.user.id) });
+  //     const reply = {
+  //       comment: req.body.reply,
+  //       user: user,
+  //     };
+  //     const commentQuery = await Comment.findOne({ _id: req.params.id });
+  //     let postId;
+  //     if (commentQuery) {
+  //       reply.commentId = req.params.id;
+  //       reply.postId = commentQuery.postId;
+  //       const newReply = await Reply.create(reply);
+  //       commentQuery.replies.push(newReply);
+  //       commentQuery.save();
+  //       postId = commentQuery.postId;
+  //     } else if (replyQuery) {
+  //       reply.parentId = req.params.id;
+  //       reply.postId = replyQuery.postId;
+  //       const newReply = await Reply.create(reply);
+  //       replyQuery.replies.push(newReply);
+  //       replyQuery.save();
+  //       postId = replyQuery.postId;
+  //     }
+  //     console.log('Reply added');
+  //     res.redirect(`/post/${postId}`);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
   likePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(

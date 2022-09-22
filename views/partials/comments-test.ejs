@@ -1,0 +1,5 @@
+<% function createReplies(comments) { %>
+<div><%= comments.comment %></div>
+<% if (comments.replies) { %> <% for (let i = 0; i < comments.replies.length;
+i++) { %> <% createReplies(comments.replies[i]) %> <% } %> <% } %> <% } %> <%
+comments.forEach(e =>{ %> <% createReplies(e) %> <%}) %>

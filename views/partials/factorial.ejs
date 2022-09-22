@@ -1,0 +1,5 @@
+<% function factorial(n) { %> <% if (n === 1) { %>
+<div><%= 1 %></div>
+<% } else { %>
+<div><%= n * factorial(n - 1) %></div>
+<% } %> <% } %> <% factorial(5) %>
